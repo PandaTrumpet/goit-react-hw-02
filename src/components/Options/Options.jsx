@@ -1,14 +1,22 @@
 export default function Options({
-  value: { good, neutral, bad },
-  onUpGood,
-  onUpNeutral,
-  onUpBad,
+  onGood,
+  onNeutral,
+  onBad,
+  resetBtn,
+  onReset,
 }) {
   return (
-    <>
-      <button onClick={onUpGood}>Good</button>
-      <button onClick={onUpNeutral}>Neutral</button>
-      <button onClick={onUpBad}>Bad</button>
-    </>
+    <div>
+      <button onClick={onGood}>Good</button>
+      <button onClick={onNeutral}>Neutral</button>
+      <button onClick={onBad}>Bad</button>
+      {resetBtn > 0 ? (
+        <button onClick={onReset} style={{ display: "inline" }}>
+          Reset
+        </button>
+      ) : (
+        <button style={{ display: "none" }}>Reset</button>
+      )}
+    </div>
   );
 }

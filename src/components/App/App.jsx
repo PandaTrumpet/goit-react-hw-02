@@ -1,45 +1,60 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Description from "../Description/Description";
 import Options from "../Options/Options";
 import Feedback from "../Feedback/Feedback";
+import Notification from "../Notification/Notification";
+
 export default function App() {
-  const [object, setObject] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
+  const [object, setObject] = useState(() => {
+    const savedObject = window.localStorage.getItem("saved-clicks");
+
+    if (savedObject !== null) {
+      return JSON.parse(savedObject);
+    }
+    return { good: 0, neutral: 0, bad: 0 };
   });
 
-  const goodClick = (event) => {
-    setObject({
+  const updateFeedback = (feedbackType) => {
+    setObject((object) => ({
       ...object,
-      good: object.good + 1,
-    });
+      [feedbackType]: object[feedbackType] + 1,
+    }));
   };
 
-  const neutralClick = (event) => {
+  const handleReset = () => {
     setObject({
-      ...object,
-      neutral: object.neutral + 1,
+      good: 0,
+      neutral: 0,
+      bad: 0,
     });
   };
-
-  const badClick = (event) => {
-    setObject({
-      ...object,
-      bad: object.bad + 1,
-    });
-  };
+  useEffect(() => {
+    window.localStorage.setItem("saved-clicks", JSON.stringify(object));
+  }, [object]);
+  const totalFeedback = object.good + object.neutral + object.bad;
 
   return (
     <>
       <Description />
       <Options
-        value={object}
-        onUpGood={goodClick}
-        onUpNeutral={neutralClick}
-        onUpBad={badClick}
+        onGood={() => {
+          updateFeedback("good");
+        }}
+        onNeutral={() => {
+          updateFeedback("neutral");
+        }}
+        onBad={() => {
+          updateFeedback("bad");
+        }}
+        resetBtn={totalFeedback}
+        onReset={handleReset}
       />
-      <Feedback value={object} />
+
+      {totalFeedback > 0 ? (
+        <Feedback result={totalFeedback} value={object} />
+      ) : (
+        <Notification />
+      )}
     </>
   );
 }
