@@ -32,7 +32,7 @@ export default function App() {
     window.localStorage.setItem("saved-clicks", JSON.stringify(object));
   }, [object]);
   const totalFeedback = object.good + object.neutral + object.bad;
-
+  const totalResult = Math.round((object.good / totalFeedback) * 100);
   return (
     <>
       <Description />
@@ -51,7 +51,7 @@ export default function App() {
       />
 
       {totalFeedback > 0 ? (
-        <Feedback result={totalFeedback} value={object} />
+        <Feedback result={totalResult} value={object} />
       ) : (
         <Notification />
       )}

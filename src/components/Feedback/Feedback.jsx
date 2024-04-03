@@ -5,7 +5,7 @@ export default function Feedback({ value: { good, bad, neutral }, result }) {
         <p>Good:{good}</p>
         <p>Neutral:{neutral}</p>
         <p>Bad:{bad}</p>
-        <p>Positiv: {Math.round((good / result) * 100)}%</p>
+        <p>Positiv: {result}%</p>
       </div>
     </>
   );
